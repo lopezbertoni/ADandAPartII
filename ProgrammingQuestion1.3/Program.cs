@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace ProgrammingQuestion1._3
     {
         private static readonly HashSet<int> Visited = new HashSet<int>();
         private static readonly Stack<int> VisitOrder = new Stack<int>(); 
+        private static List<Tuple<int,int>> NodesToVisit = new List<Tuple<int,int>>();  
 
         static void Main(string[] args)
         {
@@ -18,12 +20,15 @@ namespace ProgrammingQuestion1._3
 
             var t2Result = PrimsMst(ReadData("TestCase3.txt"));
 
-            var realData = ReadData("edges.txt");
+            var realData = PrimsMst(ReadData("edges.txt"));
 
         }
 
         private static int PrimsMst(Dictionary<int, List<Tuple<int, int>>> graph)
         {
+            Visited.Clear();
+            VisitOrder.Clear();
+            NodesToVisit.Clear();
             var sum = 0;
             var valueToAdd = 0;
             var v = graph.First().Key; //Get initial node
@@ -35,30 +40,63 @@ namespace ProgrammingQuestion1._3
                 var vertex = VisitOrder.Pop();
                 Visited.Add(vertex);
 
+                //Mark as visited in NodesToVIsit
+                //var tuple = NodesToVisit.FirstOrDefault(x => x.Item1 == v && !x.Item3);
+                //if (tuple != null)
+                //{
+                //    NodesToVisit.Remove(tuple);
+                //}
+
                 //Ordered by cost
-                var currentNodeNeighbors = graph[vertex].OrderByDescending(x => x.Item1).ToList();
+                var currentNodeNeighbors = graph[vertex].ToList();//.OrderBy(x => x.Item2).ToList();
                 //Loop through node edges
-                var nextVertex = 0;
-                valueToAdd = 0;
-                foreach (var currentNodeEdge in currentNodeNeighbors)
+                //var nextVertex = 0;
+                //valueToAdd = 0;
+                var candidates = currentNodeNeighbors.Where(currentNodeNeighbor => !Visited.Contains(currentNodeNeighbor.Item1)).ToList();
+                candidates.AddRange(NodesToVisit.Where(currentNodeNeighbor => !Visited.Contains(currentNodeNeighbor.Item1)));
+                //var candidates = currentNodeNeighbors;
+                //candidates.AddRange(NodesToVisit);
+                //candidates.OrderBy(x => x.Item2);
+                var i = 0;
+                foreach (var currentNodeEdge in candidates.OrderBy(x => x.Item2))
                 {
                     //Check if node has been visited
-                    if (!Visited.Contains(currentNodeEdge.Item2))
+                    if (!Visited.Contains(currentNodeEdge.Item1))
                     {
+                        if (i == 0)
+                        {
+                            VisitOrder.Push(currentNodeEdge.Item1);
+                            sum += currentNodeEdge.Item2;                            
+                        }
+                        else
+                        {
+                            NodesToVisit.Add(new Tuple<int, int>(currentNodeEdge.Item1, currentNodeEdge.Item2));
+                        }
+                        i++;
                         //Node has not been visited. 
-                        //VisitOrder.Push(currentNodeEdge.Item2);
-                        valueToAdd = currentNodeEdge.Item1;
-                        nextVertex = currentNodeEdge.Item2;
+                        //Add to next to visit list
+                        //NodesToVisit.Add(new Tuple<int, int>(currentNodeEdge.Item1, currentNodeEdge.Item2));
+                        //VisitOrder.Push(currentNodeEdge.Item1);
+                        //sum += currentNodeEdge.Item2;
+                        //break;
+                        //valueToAdd = currentNodeEdge.Item2;
+                        //nextVertex = currentNodeEdge.Item1;
                     }
                 }
-                if (nextVertex > 0)
-                {
-                    VisitOrder.Push(nextVertex);
-                    sum += valueToAdd;
-                }
-                //if (currentNodeNeighbors.Any())
+                NodesToVisit = NodesToVisit.Distinct().ToList();
+                //Pick next node to examine
+                //if (NodesToVisit.Any())
                 //{
-                    
+                //    //We still have nodes to visit
+                //    var nextNode = NodesToVisit.OrderBy(x => x.Item2).First();
+                //    VisitOrder.Push(nextNode.Item1);
+                //    sum += nextNode.Item2;
+                //    NodesToVisit.Remove(nextNode);
+                //}
+                //if (nextVertex > 0)
+                //{
+                //    VisitOrder.Push(nextVertex);
+                //    sum += valueToAdd;
                 //}
             }
 
@@ -81,7 +119,7 @@ namespace ProgrammingQuestion1._3
                 if (!inputData.ContainsKey(node1))
                 {
                     //Add it to graph
-                    e.Add(new Tuple<int, int>(edgeCost, node2));
+                    e.Add(new Tuple<int, int>(node2, edgeCost));
                     inputData[node1] = e;
                 }
                 else
@@ -89,7 +127,7 @@ namespace ProgrammingQuestion1._3
                     //Node already present
                     inputData.TryGetValue(node1, out e);
                     //Sort by key
-                    e.Add(new Tuple<int, int>(edgeCost, node2));
+                    e.Add(new Tuple<int, int>(node2, edgeCost));
                     inputData[node1] = e;
                 }
                 //Add both ways
@@ -97,7 +135,7 @@ namespace ProgrammingQuestion1._3
                 if (!inputData.ContainsKey(node2))
                 {
                     //Add it to graph
-                    e1.Add(new Tuple<int, int>(edgeCost, node1));
+                    e1.Add(new Tuple<int, int>(node1, edgeCost));
                     inputData[node2] = e1;
                 }
                 else
@@ -105,7 +143,7 @@ namespace ProgrammingQuestion1._3
                     //Node already present
                     inputData.TryGetValue(node2, out e1);
                     //Sort by key
-                    e1.Add(new Tuple<int, int>(edgeCost, node1));
+                    e1.Add(new Tuple<int, int>(node1, edgeCost));
                     inputData[node2] = e1;
                 }
             }
