@@ -14,7 +14,7 @@ namespace ProgrammingQuestion1._3
 
         static void Main(string[] args)
         {
-            var t1Result = ReadData("TestCase1.txt");
+            var t1Result = PrimsMst(ReadData("TestCase1.txt"));
 
             var t2Result = PrimsMst(ReadData("TestCase3.txt"));
 
@@ -25,7 +25,7 @@ namespace ProgrammingQuestion1._3
         private static int PrimsMst(Dictionary<int, List<Tuple<int, int>>> graph)
         {
             var sum = 0;
-
+            var valueToAdd = 0;
             var v = graph.First().Key; //Get initial node
             VisitOrder.Push(v);
 
@@ -38,19 +38,28 @@ namespace ProgrammingQuestion1._3
                 //Ordered by cost
                 var currentNodeNeighbors = graph[vertex].OrderByDescending(x => x.Item1).ToList();
                 //Loop through node edges
+                var nextVertex = 0;
+                valueToAdd = 0;
                 foreach (var currentNodeEdge in currentNodeNeighbors)
                 {
                     //Check if node has been visited
                     if (!Visited.Contains(currentNodeEdge.Item2))
                     {
                         //Node has not been visited. 
-                        VisitOrder.Push(currentNodeEdge.Item2);
+                        //VisitOrder.Push(currentNodeEdge.Item2);
+                        valueToAdd = currentNodeEdge.Item1;
+                        nextVertex = currentNodeEdge.Item2;
                     }
                 }
-                if (currentNodeNeighbors.Any())
+                if (nextVertex > 0)
                 {
-                    sum += currentNodeNeighbors.Last().Item1;
+                    VisitOrder.Push(nextVertex);
+                    sum += valueToAdd;
                 }
+                //if (currentNodeNeighbors.Any())
+                //{
+                    
+                //}
             }
 
             return sum;
