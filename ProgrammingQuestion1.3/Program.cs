@@ -17,9 +17,8 @@ namespace ProgrammingQuestion1._3
         static void Main(string[] args)
         {
             var t1Result = PrimsMst(ReadData("TestCase1.txt"));
-
-            var t2Result = PrimsMst(ReadData("TestCase3.txt"));
-
+            var t2Result = PrimsMst(ReadData("TestCase2.txt"));
+            var t3Result = PrimsMst(ReadData("TestCase3.txt"));
             var realData = PrimsMst(ReadData("edges.txt"));
 
         }
@@ -30,7 +29,6 @@ namespace ProgrammingQuestion1._3
             VisitOrder.Clear();
             NodesToVisit.Clear();
             var sum = 0;
-            var valueToAdd = 0;
             var v = graph.First().Key; //Get initial node
             VisitOrder.Push(v);
 
@@ -40,29 +38,20 @@ namespace ProgrammingQuestion1._3
                 var vertex = VisitOrder.Pop();
                 Visited.Add(vertex);
 
-                //Mark as visited in NodesToVIsit
-                //var tuple = NodesToVisit.FirstOrDefault(x => x.Item1 == v && !x.Item3);
-                //if (tuple != null)
-                //{
-                //    NodesToVisit.Remove(tuple);
-                //}
-
                 //Ordered by cost
                 var currentNodeNeighbors = graph[vertex].ToList();//.OrderBy(x => x.Item2).ToList();
                 //Loop through node edges
-                //var nextVertex = 0;
                 //valueToAdd = 0;
                 var candidates = currentNodeNeighbors.Where(currentNodeNeighbor => !Visited.Contains(currentNodeNeighbor.Item1)).ToList();
                 candidates.AddRange(NodesToVisit.Where(currentNodeNeighbor => !Visited.Contains(currentNodeNeighbor.Item1)));
-                //var candidates = currentNodeNeighbors;
-                //candidates.AddRange(NodesToVisit);
-                //candidates.OrderBy(x => x.Item2);
+
                 var i = 0;
                 foreach (var currentNodeEdge in candidates.OrderBy(x => x.Item2))
                 {
                     //Check if node has been visited
                     if (!Visited.Contains(currentNodeEdge.Item1))
                     {
+                        //Set is ordered so first one is next node to visit, add others to candidate list
                         if (i == 0)
                         {
                             VisitOrder.Push(currentNodeEdge.Item1);
@@ -73,33 +62,12 @@ namespace ProgrammingQuestion1._3
                             NodesToVisit.Add(new Tuple<int, int>(currentNodeEdge.Item1, currentNodeEdge.Item2));
                         }
                         i++;
-                        //Node has not been visited. 
-                        //Add to next to visit list
-                        //NodesToVisit.Add(new Tuple<int, int>(currentNodeEdge.Item1, currentNodeEdge.Item2));
-                        //VisitOrder.Push(currentNodeEdge.Item1);
-                        //sum += currentNodeEdge.Item2;
-                        //break;
-                        //valueToAdd = currentNodeEdge.Item2;
-                        //nextVertex = currentNodeEdge.Item1;
                     }
                 }
+                //Remove duplicates
                 NodesToVisit = NodesToVisit.Distinct().ToList();
-                //Pick next node to examine
-                //if (NodesToVisit.Any())
-                //{
-                //    //We still have nodes to visit
-                //    var nextNode = NodesToVisit.OrderBy(x => x.Item2).First();
-                //    VisitOrder.Push(nextNode.Item1);
-                //    sum += nextNode.Item2;
-                //    NodesToVisit.Remove(nextNode);
-                //}
-                //if (nextVertex > 0)
-                //{
-                //    VisitOrder.Push(nextVertex);
-                //    sum += valueToAdd;
-                //}
             }
-
+            Console.WriteLine("Minimum Cost Spanning Tree is : {0}", sum);
             return sum;
         }
 
