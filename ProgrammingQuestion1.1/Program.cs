@@ -24,11 +24,11 @@ namespace ProgrammingQuestion1._1
             Console.WriteLine("The results is: {0}", realData);
         }
 
-        private static int Schedule(Dictionary<int, Tuple<int, int, int>> graph)
+        private static double Schedule(Dictionary<int, Tuple<int, int, int>> graph)
         {
             var ordered = graph.OrderByDescending(x => x.Value.Item3).ThenByDescending(x => x.Value.Item1).ToList();
-            var sum = 0;
-            var completionTime = 0;
+            double sum = 0;
+            double completionTime = 0;
             foreach (var x in ordered)
             {
                 completionTime += x.Value.Item2;
