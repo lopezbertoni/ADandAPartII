@@ -8,5 +8,9 @@ namespace SharedUtilities
 {
     public class UnionFind
     {
+        private int[] _parent;
+        private int[] _rank;
+
+
     }
 }
