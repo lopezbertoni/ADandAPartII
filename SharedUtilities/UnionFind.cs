@@ -8,8 +8,8 @@ namespace SharedUtilities
 {
     public class UnionFind
     {
-        private int[] _parent;
-        private int[] _rank;
+        private readonly int[] _parent;
+        private readonly int[] _rank;
 
         public UnionFind(int size)
         {
@@ -17,15 +17,19 @@ namespace SharedUtilities
             this._rank = new int[size];
             this.Count = size;
 
+            //Initial cluster size is size of set
+            ClusterCount = size;
+
             //Initially each parent is itself and all ranks are zero.
             for (var i = 0; i < size; i++)
             {
-                _parent[i] = 0;
+                _parent[i] = i;
                 _rank[i] = 0;
             }
         }
 
         public int Count { get; set; }
+        public int ClusterCount { get; set; }
 
         public int Find(int x)
         {
@@ -72,6 +76,8 @@ namespace SharedUtilities
                     //Increase rank of x
                     _rank[xLeader] = xRank + 1;
                 }
+                //Decrease number of clusters since we're merging
+                ClusterCount--;
             }
         }
     }
