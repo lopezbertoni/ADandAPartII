@@ -18,20 +18,22 @@ namespace ProgrammingQuestion2._1
         private static void KruskalMst(string filename)
         {
             //Read data in - data is sorted
-            var graph = ReadData(filename).OrderBy(x => x.Cost).ToList();
-
-            var a = new UnionFind(graph.Count);
+            var g = ReadData(filename);
+            var size = g[0].Cost;
+            var graph = g.Skip(1).OrderBy(x => x.Cost).ToList();
+            var a = new UnionFind(size);
             var mst = new List<string>();
             foreach (var edge in graph)
             {
                 //Passed by index. Need to subtract 1
-                if (a.Find(edge.V1) != a.Find(edge.V2))
+                if (a.Find(edge.V1-1) != a.Find(edge.V2-1))
                 {
                     mst.Add(String.Format("{0},{1}", edge.V1, edge.V2));
-                    a.Union(edge.V1, edge.V2);
+                    a.Union(edge.V1-1, edge.V2-1);
                 }
             }
             var result = mst;
+            Console.WriteLine(String.Join("|",result));
         }
 
         private static List<EdgeCosts> ReadData(string filename)
@@ -39,6 +41,7 @@ namespace ProgrammingQuestion2._1
             var txtData = File.ReadLines(filename).ToArray();
             var inputData = new List<EdgeCosts>();
 
+            inputData.Add(new EdgeCosts{Cost = Convert.ToInt32(txtData[0])});
             foreach (var s in txtData.Skip(1))
             {
                 var x = s.Split(' ');
