@@ -94,5 +94,17 @@ namespace SharedUtilities
         {
             return _clusterSize[Find(x)];
         }
+
+        public string GetInfo()
+        {
+            var distinctLeaders = _parent.Where(x => x > 0).Distinct().ToList();
+            var results = String.Empty;
+
+            foreach (var leader in distinctLeaders)
+            {
+                results += String.Format("The leader {0} has {1} children.{2}", leader, GetClusterSize(leader), Environment.NewLine);
+            }
+            return results;
+        }
     }
 }

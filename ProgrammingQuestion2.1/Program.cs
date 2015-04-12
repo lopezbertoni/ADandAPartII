@@ -12,17 +12,22 @@ namespace ProgrammingQuestion2._1
     {
         static void Main(string[] args)
         {
-            KruskalMst("TestCase1.txt");
-            SingleLlinkClustering("TestCase1.txt", 5);
-            SingleLlinkClustering("TestCase2.txt", 2);
+            //KruskalMst("TestCase1.txt");
+            //SingleLlinkClustering("TestCase1.txt", 3);
+            //SingleLlinkClustering("TestCase1.txt", 4);
 
-            SingleLlinkClustering("TestCase3.txt", 2);
-            SingleLlinkClustering("TestCase3.txt", 3);
-            SingleLlinkClustering("TestCase3.txt", 4);
+            //SingleLlinkClustering("TestCase2.txt", 3);
+            //SingleLlinkClustering("TestCase2.txt", 4);
 
-            SingleLlinkClustering("TestCase4.txt", 2);
-            SingleLlinkClustering("TestCase4.txt", 3);
-            SingleLlinkClustering("TestCase4.txt", 4);
+            //SingleLlinkClustering("TestCase3.txt", 2);
+            //SingleLlinkClustering("TestCase3.txt", 3);
+            //SingleLlinkClustering("TestCase3.txt", 4);
+
+            //SingleLlinkClustering("TestCase4.txt", 2);
+            //SingleLlinkClustering("TestCase4.txt", 3);
+            //SingleLlinkClustering("TestCase4.txt", 4);
+
+            SingleLlinkClustering("clustering1.txt", 4);
         }
 
         private static void SingleLlinkClustering(string filename, int k)
@@ -36,18 +41,22 @@ namespace ProgrammingQuestion2._1
                 var graph = g.Skip(1).OrderBy(x => x.Cost).ToList();
                 var a = new UnionFind(size);
                 var i = 0;
-                while (a.ClusterCount > k)
+                var d = 0;
+                while (a.ClusterCount >= k)
                 {
+                    //Console.WriteLine("Current cluster size is: {0}", a.ClusterCount);
                     var edge = graph[i];
                     //Passed by index. Need to subtract 1
                     if (a.Find(edge.V1 - 1) != a.Find(edge.V2 - 1))
                     {
-                        //mst.Add(String.Format("{0},{1}", edge.V1, edge.V2));
+                        //Console.WriteLine(String.Format("Merging {0},{1}", edge.V1, edge.V2));
                         a.Union(edge.V1 - 1, edge.V2 - 1);
+                        d = edge.Cost;
                     }
                     i++;
                 }
-                Console.WriteLine(String.Format("The maximum spacing for {0} - clustering in {1} is: {2}", k, filename, graph[i].Cost));
+                //Console.WriteLine(a.GetInfo());
+                Console.WriteLine(String.Format("The maximum spacing for {0} - clustering in {1} is: {2}", k, filename, d));
             }
         }
 
