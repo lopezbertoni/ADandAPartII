@@ -13,13 +13,40 @@ namespace ProgrammingQuestion2._1
         static void Main(string[] args)
         {
             KruskalMst("TestCase1.txt");
+            SingleLlinkClustering("TestCase1.txt", 5);
+        }
+
+        private static void SingleLlinkClustering(string filename, int k)
+        {
+            //Read data in, first element contains number of nodes.
+            var g = ReadData(filename);
+            var size = g[0].Cost;
+            if (size > k)
+            {
+                //Sort data
+                var graph = g.Skip(1).OrderBy(x => x.Cost).ToList();
+                var a = new UnionFind(size);
+                var i = 0;
+                while (a.ClusterCount > k)
+                {
+                    var edge = graph[i];
+                    //Passed by index. Need to subtract 1
+                    if (a.Find(edge.V1 - 1) != a.Find(edge.V2 - 1))
+                    {
+                        //mst.Add(String.Format("{0},{1}", edge.V1, edge.V2));
+                        a.Union(edge.V1 - 1, edge.V2 - 1);
+                    }
+                    i++;
+                }
+            }
         }
 
         private static void KruskalMst(string filename)
         {
-            //Read data in - data is sorted
+            //Read data in, first element contains number of nodes.
             var g = ReadData(filename);
             var size = g[0].Cost;
+            //Sort data
             var graph = g.Skip(1).OrderBy(x => x.Cost).ToList();
             var a = new UnionFind(size);
             var mst = new List<string>();
@@ -32,8 +59,7 @@ namespace ProgrammingQuestion2._1
                     a.Union(edge.V1-1, edge.V2-1);
                 }
             }
-            var result = mst;
-            Console.WriteLine(String.Join("|",result));
+            Console.WriteLine(String.Join(" | ", mst));
         }
 
         private static List<EdgeCosts> ReadData(string filename)

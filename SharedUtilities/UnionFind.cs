@@ -10,12 +10,14 @@ namespace SharedUtilities
     {
         private readonly int[] _parent;
         private readonly int[] _rank;
+        private readonly int[] _clusterSize;
 
         public UnionFind(int size)
         {
             this._parent = new int[size];
             this._rank = new int[size];
             this.Count = size;
+            _clusterSize = new int[size];
 
             //Initial cluster size is size of set
             ClusterCount = size;
@@ -25,6 +27,7 @@ namespace SharedUtilities
             {
                 _parent[i] = i;
                 _rank[i] = 0;
+                _clusterSize[i] = 1;
             }
         }
 
@@ -62,12 +65,16 @@ namespace SharedUtilities
                     //xTree goes below yTree
                     //xLeader is replaced by yLeader
                     _parent[x] = yLeader;
+                    //Cluster size increases by size of x's cluster
+                    _clusterSize[y] += _clusterSize[x];
                 }
                 if (xRank > yRank)
                 {
                     //yTree goes below xTree
                     //yLeader is replaced by xLeader
                     _parent[y] = xLeader;
+                    //Cluster size increases by size of y's cluster
+                    _clusterSize[x] += _clusterSize[y];
                 }
                 if (xRank == yRank)
                 {
@@ -75,10 +82,17 @@ namespace SharedUtilities
                     _parent[y] = xLeader;
                     //Increase rank of x
                     _rank[xLeader] = xRank + 1;
+                    //Cluster size increases by size of y's cluster (does not matter)
+                    _clusterSize[x] += _clusterSize[y];
                 }
                 //Decrease number of clusters since we're merging
                 ClusterCount--;
             }
+        }
+
+        public int GetClusterSize(int x)
+        {
+            return _clusterSize[Find(x)];
         }
     }
 }
