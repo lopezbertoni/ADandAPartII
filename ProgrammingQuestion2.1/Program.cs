@@ -14,6 +14,15 @@ namespace ProgrammingQuestion2._1
         {
             KruskalMst("TestCase1.txt");
             SingleLlinkClustering("TestCase1.txt", 5);
+            SingleLlinkClustering("TestCase2.txt", 2);
+
+            SingleLlinkClustering("TestCase3.txt", 2);
+            SingleLlinkClustering("TestCase3.txt", 3);
+            SingleLlinkClustering("TestCase3.txt", 4);
+
+            SingleLlinkClustering("TestCase4.txt", 2);
+            SingleLlinkClustering("TestCase4.txt", 3);
+            SingleLlinkClustering("TestCase4.txt", 4);
         }
 
         private static void SingleLlinkClustering(string filename, int k)
@@ -38,6 +47,7 @@ namespace ProgrammingQuestion2._1
                     }
                     i++;
                 }
+                Console.WriteLine(String.Format("The maximum spacing for {0} - clustering in {1} is: {2}", k, filename, graph[i].Cost));
             }
         }
 
