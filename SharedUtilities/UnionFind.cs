@@ -64,26 +64,26 @@ namespace SharedUtilities
                 {
                     //xTree goes below yTree
                     //xLeader is replaced by yLeader
-                    _parent[x] = yLeader;
+                    _parent[xLeader] = yLeader;
                     //Cluster size increases by size of x's cluster
-                    _clusterSize[y] += _clusterSize[x];
+                    _clusterSize[yLeader] += _clusterSize[xLeader];
                 }
                 if (xRank > yRank)
                 {
                     //yTree goes below xTree
                     //yLeader is replaced by xLeader
-                    _parent[y] = xLeader;
+                    _parent[yLeader] = xLeader;
                     //Cluster size increases by size of y's cluster
-                    _clusterSize[x] += _clusterSize[y];
+                    _clusterSize[xLeader] += _clusterSize[yLeader];
                 }
                 if (xRank == yRank)
                 {
                     //Both have same rank so arbitrarily set y below x
-                    _parent[y] = xLeader;
+                    _parent[yLeader] = xLeader;
                     //Increase rank of x
                     _rank[xLeader] = xRank + 1;
                     //Cluster size increases by size of y's cluster (does not matter)
-                    _clusterSize[x] += _clusterSize[y];
+                    _clusterSize[xLeader] += _clusterSize[yLeader];
                 }
                 //Decrease number of clusters since we're merging
                 ClusterCount--;

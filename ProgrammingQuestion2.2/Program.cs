@@ -12,8 +12,9 @@ namespace ProgrammingQuestion2._2
     {
         private static void Main(string[] args)
         {
-            KruskalMst("TestCase1.txt", 4);
-            //KruskalMst("clustering_big.txt", 24);
+            //KruskalMst("TestCase1.txt", 4);
+            //KruskalMst("TestCase2.txt", 3);
+            KruskalMst("clustering_big.txt", 24);
         }
 
         private static void KruskalMst(string filename, int bitNumber)
@@ -41,6 +42,7 @@ namespace ProgrammingQuestion2._2
         {
             var a = ReadData(filename);
             var c = GetBinaryNumbersWithAtMostThreeOnes(bitnumber);
+            var edges = new HashSet<String>();
 
             var inputData = new List<EdgeCosts>();
             inputData.Add(new EdgeCosts{Cost = a.Count});
@@ -52,8 +54,15 @@ namespace ProgrammingQuestion2._2
 
                     if (a.ContainsKey(b))
                     {
-                        //It's part of the graph
-                        inputData.Add(new EdgeCosts { V1 = edge.Value, V2 = a[b], Cost = i.Value });
+                        var sortedKeys = new List<int> { edge.Value, a[b] };
+                        sortedKeys.Sort();
+                        if (!edges.Contains(String.Format("{0}", String.Join("", sortedKeys))))
+                        {
+                            //It's part of the graph
+                            inputData.Add(new EdgeCosts {V1 = edge.Value, V2 = a[b], Cost = i.Value});
+                            edges.Add(String.Format("{0}", String.Join("", sortedKeys)));
+                        }
+
                     }
                 }
             }
@@ -62,7 +71,7 @@ namespace ProgrammingQuestion2._2
 
         private static Dictionary<int, int> ReadData(string filename)
         {
-            var txtData = File.ReadLines(filename).ToArray();
+            var txtData = File.ReadLines(filename).ToArray().Distinct();
             var inputData = new Dictionary<int, int>();
 
             var i = 1;

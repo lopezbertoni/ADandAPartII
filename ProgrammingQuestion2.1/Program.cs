@@ -13,19 +13,19 @@ namespace ProgrammingQuestion2._1
         static void Main(string[] args)
         {
             //KruskalMst("TestCase1.txt");
-            //SingleLinkClustering("TestCase1.txt", 3);
-            //SingleLinkClustering("TestCase1.txt", 4);
+            SingleLinkClustering("TestCase1.txt", 3);
+            SingleLinkClustering("TestCase1.txt", 4);
 
-            //SingleLinkClustering("TestCase2.txt", 3);
-            //SingleLinkClustering("TestCase2.txt", 4);
+            SingleLinkClustering("TestCase2.txt", 3);
+            SingleLinkClustering("TestCase2.txt", 4);
 
-            //SingleLinkClustering("TestCase3.txt", 2);
-            //SingleLinkClustering("TestCase3.txt", 3);
-            //SingleLinkClustering("TestCase3.txt", 4);
+            SingleLinkClustering("TestCase3.txt", 2);
+            SingleLinkClustering("TestCase3.txt", 3);
+            SingleLinkClustering("TestCase3.txt", 4);
 
-            //SingleLinkClustering("TestCase4.txt", 2);
-            //SingleLinkClustering("TestCase4.txt", 3);
-            //SingleLinkClustering("TestCase4.txt", 4);
+            SingleLinkClustering("TestCase4.txt", 2);
+            SingleLinkClustering("TestCase4.txt", 3);
+            SingleLinkClustering("TestCase4.txt", 4);
 
             SingleLinkClustering("clustering1.txt", 4);
         }
