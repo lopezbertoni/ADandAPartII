@@ -13,24 +13,24 @@ namespace ProgrammingQuestion2._1
         static void Main(string[] args)
         {
             //KruskalMst("TestCase1.txt");
-            //SingleLlinkClustering("TestCase1.txt", 3);
-            //SingleLlinkClustering("TestCase1.txt", 4);
+            //SingleLinkClustering("TestCase1.txt", 3);
+            //SingleLinkClustering("TestCase1.txt", 4);
 
-            //SingleLlinkClustering("TestCase2.txt", 3);
-            //SingleLlinkClustering("TestCase2.txt", 4);
+            //SingleLinkClustering("TestCase2.txt", 3);
+            //SingleLinkClustering("TestCase2.txt", 4);
 
-            //SingleLlinkClustering("TestCase3.txt", 2);
-            //SingleLlinkClustering("TestCase3.txt", 3);
-            //SingleLlinkClustering("TestCase3.txt", 4);
+            //SingleLinkClustering("TestCase3.txt", 2);
+            //SingleLinkClustering("TestCase3.txt", 3);
+            //SingleLinkClustering("TestCase3.txt", 4);
 
-            //SingleLlinkClustering("TestCase4.txt", 2);
-            //SingleLlinkClustering("TestCase4.txt", 3);
-            //SingleLlinkClustering("TestCase4.txt", 4);
+            //SingleLinkClustering("TestCase4.txt", 2);
+            //SingleLinkClustering("TestCase4.txt", 3);
+            //SingleLinkClustering("TestCase4.txt", 4);
 
-            SingleLlinkClustering("clustering1.txt", 4);
+            SingleLinkClustering("clustering1.txt", 4);
         }
 
-        private static void SingleLlinkClustering(string filename, int k)
+        private static void SingleLinkClustering(string filename, int k)
         {
             //Read data in, first element contains number of nodes.
             var g = ReadData(filename);
