@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace SharedUtilities
 {
-    public class Data
+    public class KnapsackItems
     {
+        public int Weight { get; set; }
+        public int Value { get; set; }
     }
 }
