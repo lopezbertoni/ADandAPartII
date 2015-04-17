@@ -57,7 +57,7 @@ namespace ProgrammingQuestion3._1
             //Get data
             var knapsackCapacity = d[0].Value;
             var n = d[0].Weight;
-            var ordered = d.Skip(1).OrderBy(x => x.Weight).ToList();
+            var ordered = d.Skip(1).ToList();
             var values = ordered.Select(x => x.Value).ToArray();
             var weights = ordered.Select(x => x.Weight).ToArray();
 
@@ -118,23 +118,27 @@ namespace ProgrammingQuestion3._1
 
             //First line has knapsack size and number of items. 
             //Get data
-            var knapsackCapacity = d[0].Value+1;
-            var n = d[0].Weight+1;
+            var knapsackCapacity = d[0].Value;
+            var n = d[0].Weight;
+            d[0].Weight = 0;
+            d[0].Value = 0;
 
             //Initialize array, by default all elements are zeroes. 
-            var a = new int[n,knapsackCapacity];
-
-            for (var i = 1; i < n; i++)
+            var a = new int[n+1,knapsackCapacity+1];
+            for (var i = 1; i <= n; i++)
             {
-                for (var x = 0; x < knapsackCapacity; x++)
+                for (var x = 0; x <= knapsackCapacity; x++)
                 {
+                    var option1 = a[i - 1, x];
+                    var option2 = int.MinValue;
                     if (d[i].Weight <= x)
                     {
-                        a[i, x] = Math.Max(a[i - 1, x], a[i - 1, x - d[i].Weight] + d[i].Value);
+                        option2 = d[i].Value + a[i - 1, x - d[i].Weight];
                     }
+                    a[i, x] = Math.Max(option1, option2);
                 }
             }
-            Console.WriteLine("Dynamic Programming => The max value for {0} is  {1}", filename, a[n-1, knapsackCapacity-1]);
+            Console.WriteLine("Dynamic Programming => The max value for {0} is  {1}", filename, a[n, knapsackCapacity]);
         }
 
         private static List<KnapsackItems> ReadData(string filename)

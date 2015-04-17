@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProgrammingAssignment2", "P
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProgrammingAssignment3", "ProgrammingAssignment3", "{CDC6CB80-3605-4A90-9A83-665830BB3D9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProgrammingQuestion3", "ProgrammingQuestion3.1\ProgrammingQuestion3.csproj", "{5CC00E28-0E14-4F32-96E6-92B7CB631DE2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProgrammingQuestion3", "ProgrammingQuestion3\ProgrammingQuestion3.csproj", "{5CC00E28-0E14-4F32-96E6-92B7CB631DE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
