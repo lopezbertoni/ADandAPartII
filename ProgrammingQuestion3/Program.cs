@@ -11,18 +11,24 @@ namespace ProgrammingQuestion3._1
 {
     class Program
     {
+        public static int Iterations = 0;
+
         static void Main(string[] args)
         {
-            Knapsack("TestCase1.txt");
-            KnapsackR("TestCase1.txt");
+            //Knapsack("TestCase1.txt");
+            //KnapsackR("TestCase1.txt");
+            //KnapsackRMemo("TestCase1.txt");
 
-            Knapsack("TestCase2.txt");
-            KnapsackR("TestCase2.txt");
+            //Knapsack("TestCase2.txt");
+            //KnapsackR("TestCase2.txt");
+            //KnapsackRMemo("TestCase2.txt");
 
-            //Knapsack("knapsack1.txt");
+            Knapsack("knapsack1.txt");
             //KnapsackR("knapsack1.txt");
+            KnapsackRMemo("knapsack1.txt");
 
-            KnapsackR("knapsack_big.txt");
+
+            KnapsackRMemo("knapsack_big.txt");
         }
 
         private static void KnapsackR(string filename)
@@ -33,34 +39,36 @@ namespace ProgrammingQuestion3._1
             //Get data
             var knapsackCapacity = d[0].Value;
             var n = d[0].Weight;
-            var values = d.Skip(1).Select(x => x.Value).ToArray();
-            var weights = d.Skip(1).Select(x => x.Weight).ToArray();
+            var ordered = d.Skip(1).OrderBy(x => x.Weight).ToList();
+            var values = ordered.Select(x => x.Value).ToArray();
+            var weights = ordered.Select(x => x.Weight).ToArray();
 
-            //Iterations = 0;
-            //var r = KnapsackRecursive(weights, values, knapsackCapacity, n);
-            //Console.WriteLine("Recursive solution => The max value for {0} is  {1}", filename, r);
-            //Console.WriteLine("This took {0} iterations", Iterations);
+            Iterations = 0;
+            var r = KnapsackRecursive(weights, values, knapsackCapacity, n);
+            Console.WriteLine("Recursive solution => The max value for {0} is  {1}", filename, r);
+            Console.WriteLine("This took {0} iterations", Iterations);
+        }
+
+        private static void KnapsackRMemo(string filename)
+        {
+            var d = ReadData(filename);
+
+            //First line has knapsack size and number of items. 
+            //Get data
+            var knapsackCapacity = d[0].Value;
+            var n = d[0].Weight;
+            var ordered = d.Skip(1).OrderBy(x => x.Weight).ToList();
+            var values = ordered.Select(x => x.Value).ToArray();
+            var weights = ordered.Select(x => x.Weight).ToArray();
 
             //Memoization version
             Iterations = 0;
-            var cache = new int[n+1, knapsackCapacity+1];
-            for (var i = 0; i <= n; i++)
-            {
-                for (var j = 0; j <= knapsackCapacity; j++)
-                {
-                    cache[i, j] = -1;
-                }
-            }
-            //var values1 = d.Select(x => x.Value).ToArray();
-            //var weights1 = d.Select(x => x.Weight).ToArray();
-            //values1[0] = 0;
-            //weights1[0] = 0;
+            var cache = new Dictionary<string, int>();
+
             var r1 = KnapsackRecursiveMemoization(weights, values, knapsackCapacity, n, cache);
             Console.WriteLine("Recursive memoized => The max value for {0} is  {1}", filename, r1);
             Console.WriteLine("This took {0} iterations", Iterations);
         }
-
-        public static int Iterations = 0;
 
         private static int KnapsackRecursive(int[] weights, int[] values, int w, int n)
         {
@@ -80,15 +88,14 @@ namespace ProgrammingQuestion3._1
             return Math.Max(alpha, beta);
         }
 
-        private static int KnapsackRecursiveMemoization(int[] weights, int[] values, int w, int n, int[,] cache)
+        private static int KnapsackRecursiveMemoization(int[] weights, int[] values, int w, int n, Dictionary<string, int> cache)
         {
             if (w == 0 || n == 0)
             {
                 return 0;
             }
-            if (cache[n, w] == -1)
+            if (!cache.ContainsKey(String.Format("{0}{1}", n,w)))
             {
-                
                 if (weights[n - 1] > w)
                 {
                     return KnapsackRecursiveMemoization(weights, values, w, n - 1, cache);
@@ -96,11 +103,13 @@ namespace ProgrammingQuestion3._1
                 var alpha = values[n - 1] + KnapsackRecursiveMemoization(weights, values, w - weights[n - 1], n - 1, cache);
                 var beta = KnapsackRecursiveMemoization(weights, values, w, n - 1, cache);
                 //Console.WriteLine("w = {0}, n = {1}, value = {2}, alpha = {3}, beta={4}", w, n, Math.Max(alpha, beta), alpha, beta);
-                cache[n, w] = Math.Max(alpha, beta);
+                //cache[n, w] = Math.Max(alpha, beta);
+                var result = Math.Max(alpha, beta);
+                cache.Add(String.Format("{0}{1}", n, w), result);
                 Iterations++;
-                return Math.Max(alpha, beta);
+                return result;
             }
-            return cache[n, w];
+            return cache[String.Format("{0}{1}", n, w)];
         }
 
         private static void Knapsack(string filename)
