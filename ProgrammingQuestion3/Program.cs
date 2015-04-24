@@ -15,20 +15,25 @@ namespace ProgrammingQuestion3._1
 
         static void Main(string[] args)
         {
-            //Knapsack("TestCase1.txt");
+            MinAverageSearchTimeProblem();
+
+            Knapsack("TestCase1.txt");
+            KnapsackReversed("TestCase1.txt");
             //KnapsackR("TestCase1.txt");
             //KnapsackRMemo("TestCase1.txt");
 
-            //Knapsack("TestCase2.txt");
+            Knapsack("TestCase2.txt");
+            KnapsackReversed("TestCase2.txt");
             //KnapsackR("TestCase2.txt");
             //KnapsackRMemo("TestCase2.txt");
 
             Knapsack("knapsack1.txt");
+            KnapsackReversed("knapsack1.txt");
             //KnapsackR("knapsack1.txt");
-            KnapsackRMemo("knapsack1.txt");
+            //KnapsackRMemo("knapsack1.txt");
 
 
-            KnapsackRMemo("knapsack_big.txt");
+            //KnapsackRMemo("knapsack_big.txt");
         }
 
         private static void KnapsackR(string filename)
@@ -141,6 +146,36 @@ namespace ProgrammingQuestion3._1
             Console.WriteLine("Dynamic Programming => The max value for {0} is  {1}", filename, a[n, knapsackCapacity]);
         }
 
+        private static void KnapsackReversed(string filename)
+        {
+            var d = ReadData(filename);
+
+            //First line has knapsack size and number of items. 
+            //Get data
+            var knapsackCapacity = d[0].Value;
+            var n = d[0].Weight;
+            d[0].Weight = 0;
+            d[0].Value = 0;
+
+            //Initialize array, by default all elements are zeroes. 
+            var a = new int[n + 1, knapsackCapacity + 1];
+            for (var x = 0; x <= knapsackCapacity; x++)
+            {
+                for (var i = 1; i <= n; i++)
+                {
+                    var option1 = a[i - 1, x];
+                    var option2 = int.MinValue;
+                    if (d[i].Weight <= x)
+                    {
+                        option2 = d[i].Value + a[i - 1, x - d[i].Weight];
+                    }
+                    a[i, x] = Math.Max(option1, option2);
+                }
+            }
+            Console.WriteLine("Dynamic Programming Reversed => The max value for {0} is  {1}", filename, a[n, knapsackCapacity]);
+
+        }
+
         private static List<KnapsackItems> ReadData(string filename)
         {
             var txtData = File.ReadLines(filename).ToArray();
@@ -152,6 +187,40 @@ namespace ProgrammingQuestion3._1
                 inputData.Add(new KnapsackItems { Value = Convert.ToInt32(x[0]), Weight = Convert.ToInt32(x[1]) });
             }
             return inputData;
+        }
+
+        private static void MinAverageSearchTimeProblem()
+        {
+            var d = new Dictionary<int, int> {{1, 5}, {2, 40}, {3, 8}, {4, 4}, {5, 10}, {6, 10}, {7, 23}};
+
+            var n = d.Count;
+            var a = new int[7, 7];
+
+            for (var s = 0; s <= n - 1; s++)
+            {
+                for (var i = 1; i <= n; i++)
+                {
+                    //if()
+                    var values = new List<int>();
+                    for (var r = i; r <= i + s; r++)
+                    {
+                        var i1 = i;
+                        var s1 = s;
+                        var pk = d.Where(x => x.Key >= i1 && x.Key <= i1 + s1).Sum(x => x.Value);
+                        if (r + 1 < n && i + s < n)
+                        {
+                         values.Add(pk + a[i, r-1] + a[r+1,i+s]);
+                           
+                        }
+                    }
+                    if (values.Any())
+                    {
+                        a[i, i + s] = values.Min();
+                    }
+                }
+            }
+
+            Console.WriteLine("Answer = {0}", a[1,6]);
         }
     }
 }
