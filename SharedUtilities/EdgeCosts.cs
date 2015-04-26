@@ -12,4 +12,11 @@ namespace SharedUtilities
         public int V2 { get; set; }
         public int Cost { get; set; }
     }
+
+    public class Edge
+    {
+        public int Head { get; set; }
+        public int Tail { get; set; }
+        public int Cost { get; set; }
+    }
 }
